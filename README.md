@@ -8,3 +8,6 @@ O aplicação tem por objetivo auxiliar a dirigibilidade de um veículo, fornece
 * Python >= 3
 * NumPy
 * OpenCV 
+
+# Yolo repository
+* https://github.com/rafixcs/Yolo_ADSPTF.git
