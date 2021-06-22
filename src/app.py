@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
 import math
-from regionOfInterest import regionOfInterest
+import argparse
+from src.regionOfInterest import regionOfInterest
+
 
 avgLeft = (0, 0, 0, 0)
 avgRight = (0, 0, 0, 0)
@@ -126,54 +128,65 @@ def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
 def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
     return cv2.addWeighted(initial_img, α, img, β, λ)
 
+def main(videoDir, debug=False):    
+    video = cv2.VideoCapture(videoDir)
+    while True:
+        ret, orig_frame = video.read()
+        if not ret:
+            video = cv2.VideoCapture(videoDir)
+            continue
 
-videoDir = r'D:\fac\cadeiras\2021_01\adsp\tf\videos\big.mp4'
-video = cv2.VideoCapture(videoDir)
-while True:
-    ret, orig_frame = video.read()
-    if not ret:
-        video = cv2.VideoCapture(videoDir)
-        continue
+        # Gaussian blur
+        blurImg_5 = cv2.GaussianBlur(orig_frame, (5, 5), 0)
+        blurImg_11 = cv2.GaussianBlur(orig_frame, (11, 11), 0)
+        blurImg_114 = cv2.GaussianBlur(orig_frame, (11, 11), cv2.BORDER_DEFAULT)
 
-    # Gaussian blur
-    blurImg_5 = cv2.GaussianBlur(orig_frame, (5, 5), 0)
-    blurImg_11 = cv2.GaussianBlur(orig_frame, (11, 11), 0)
-    blurImg_114 = cv2.GaussianBlur(orig_frame, (11, 11), cv2.BORDER_DEFAULT)
+        # Detecção de bordas de Canny
+        edgesImage_5 = cv2.Canny(blurImg_5, 30, 40)
+        edgesImage_11 = cv2.Canny(blurImg_11, 30, 40)
+        edgesImage_114 = cv2.Canny(blurImg_114, 40, 50)
 
-    # Detecção de bordas de Canny
-    edgesImage_5 = cv2.Canny(blurImg_5, 30, 40)
-    edgesImage_11 = cv2.Canny(blurImg_11, 30, 40)
-    edgesImage_114 = cv2.Canny(blurImg_114, 40, 50)
+        image = edgesImage_11
 
-    image = edgesImage_11
+        regionInterestImage = regionOfInterest(image, "trapezio")
 
-    regionInterestImage = regionOfInterest(image, "trapezio")
+        # lines = cv2.HoughLinesP(regionInterestImage, 1, np.pi/180, 40, np.array([]), 30, 200)
+        # line_img = np.zeros((*regionInterestImage.shape, 3), dtype=np.uint8)
 
-    # lines = cv2.HoughLinesP(regionInterestImage, 1, np.pi/180, 40, np.array([]), 30, 200)
-    # line_img = np.zeros((*regionInterestImage.shape, 3), dtype=np.uint8)
+        #lineMarkedImage = hough_lines(regionInterestImage, 1, np.pi/180, 40, 30, 200)
+        lineMarkedImage = hough_lines(
+            regionInterestImage, 1, np.pi/180, 50, 50, 10)
 
-    #lineMarkedImage = hough_lines(regionInterestImage, 1, np.pi/180, 40, 30, 200)
-    lineMarkedImage = hough_lines(
-        regionInterestImage, 1, np.pi/180, 50, 50, 10)
+        # correção de fluxo
+        # image = cv2.line(image, start_point, end_point, color, thickness)
+        height = lineMarkedImage.shape[0]
+        width = lineMarkedImage.shape[1]
 
-    # correção de fluxo
-    # image = cv2.line(image, start_point, end_point, color, thickness)
-    height = lineMarkedImage.shape[0]
-    width = lineMarkedImage.shape[1]
+        correctionImage = cv2.line(lineMarkedImage, (int(
+            width/2), height), (int(width/2), int(0.9*height)), (100, 100, 100), 5)
 
-    correctionImage = cv2.line(lineMarkedImage, (int(
-        width/2), height), (int(width/2), int(0.9*height)), (100, 100, 100), 5)
+        finalImage = weighted_img(correctionImage, orig_frame)
 
-    finalImage = weighted_img(correctionImage, orig_frame)
+        if debug:
+            cv2.imshow("orig_frame", orig_frame)
+            #cv2.imshow("edgesImage_11", edgesImage_11)
+            #cv2.imshow("edgesImage_114", edgesImage_114)
+            cv2.imshow("correctionImage", correctionImage)
+        
+        cv2.imshow("finalImage", finalImage)
+        #cv2.imshow("orig_frame", orig_frame)
+        key = cv2.waitKey(1)
+        if key == 27:
+            break
+    video.release()
+    cv2.destroyAllWindows()
 
-    cv2.imshow("orig_frame", orig_frame)
-    #cv2.imshow("edgesImage_11", edgesImage_11)
-    #cv2.imshow("edgesImage_114", edgesImage_114)
-    cv2.imshow("correctionImage", correctionImage)
-    cv2.imshow("finalImage", finalImage)
-    #cv2.imshow("orig_frame", orig_frame)
-    key = cv2.waitKey(1)
-    if key == 27:
-        break
-video.release()
-cv2.destroyAllWindows()
+if __name__ == '__main__':
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path', type=str, required=True, help='Path to the video file')
+    parser.add_argument('--debug', action='store_true', help='Show all the layers of processing image')
+    
+    args = parser.parse_args()
+    
+    main(args.path, args.debug)
