@@ -19,13 +19,11 @@ git clone https://github.com/rafixcs/Yolo_ADSPTF.git -b master
 # Instalação
 Criei o ambiente conda:
 
-```conda create -n yolo python=3.7
-```
+``` conda create -n yolo python=3.7 ```
 
 Instale as dependencias do cuda e do pytorch:
 
-```conda install -c pytorch pytorch==1.7.0 torchvision cudatoolkit=10.1
-```
+``` conda install -c pytorch pytorch==1.7.0 torchvision cudatoolkit=10.1 ```
 
 E por fim instale as dependencias da Yolo:
 
@@ -41,13 +39,11 @@ pip install  -r requirements.txt
 
 Na pasta base execute o seguinte comando para executar a detecção de linhas junto com a Yolo:
 
-```python -m src.app --path <path do arquivo de video .mp4>
-```
+``` python -m src.app --path <path do arquivo de video .mp4> ```
 
 Também é possével executar primeiro a detecção de objetos e posteriormente a detecção das linhas, tem performance melhor porém demora a inciar
 
-```python -m src.app --path <path do arquivo de video .mp4> --dis-yolo --pre-detect
-```
+``` python -m src.app --path <path do arquivo de video .mp4> --dis-yolo --pre-detect ```
 
 
 
