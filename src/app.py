@@ -3,6 +3,7 @@ import numpy as np
 import math
 import argparse
 from src.regionOfInterest import regionOfInterest
+from src.yolodetection import yolo
 
 
 avgLeft = (0, 0, 0, 0)
@@ -128,7 +129,7 @@ def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
 def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
     return cv2.addWeighted(initial_img, α, img, β, λ)
 
-def main(videoDir, debug=False):    
+def main(videoDir, debug, dis_yolo):    
     video = cv2.VideoCapture(videoDir)
     while True:
         ret, orig_frame = video.read()
@@ -172,6 +173,8 @@ def main(videoDir, debug=False):
             #cv2.imshow("edgesImage_11", edgesImage_11)
             #cv2.imshow("edgesImage_114", edgesImage_114)
             cv2.imshow("correctionImage", correctionImage)
+        if not dis_yolo:            
+            finalImage = yolo(orig_frame, finalImage)
         
         cv2.imshow("finalImage", finalImage)
         #cv2.imshow("orig_frame", orig_frame)
@@ -186,7 +189,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--path', type=str, required=True, help='Path to the video file')
     parser.add_argument('--debug', action='store_true', help='Show all the layers of processing image')
+    parser.add_argument('--dis-yolo', default=False, action='store_true', help='Disable yolo detection')
     
     args = parser.parse_args()
     
-    main(args.path, args.debug)
+    main(args.path, args.debug, args.dis_yolo)

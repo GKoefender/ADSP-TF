@@ -1,0 +1,1 @@
+python .\detect.py --weights .\runs\training\exp2\weights\best.pt --source ..\imgs\test\ --project ..\detections\ --name det --save-txt --save-conf --nosave
