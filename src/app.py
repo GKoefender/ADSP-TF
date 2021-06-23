@@ -3,7 +3,7 @@ import numpy as np
 import math
 import argparse
 from src.regionOfInterest import regionOfInterest
-from src.yolodetection import yolo
+from src.yolodetection import *
 
 
 avgLeft = (0, 0, 0, 0)
@@ -129,12 +129,20 @@ def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
 def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
     return cv2.addWeighted(initial_img, α, img, β, λ)
 
-def main(videoDir, debug, dis_yolo):    
-    video = cv2.VideoCapture(videoDir)
+
+def main(args):
+    
+    video_path = args.save_dir + args.name + '/' + args.path.split(os.sep)[-1] if args.pre_detect and args.dis_yolo else args.path    
+
+    if args.pre_detect and args.dis_yolo:
+        pre_detection(args.path, args.save_dir, args.name, args.weights)    
+    
+    video = cv2.VideoCapture(video_path)
+
     while True:
         ret, orig_frame = video.read()
         if not ret:
-            video = cv2.VideoCapture(videoDir)
+            video = cv2.VideoCapture(video_path)
             continue
 
         # Gaussian blur
@@ -168,13 +176,13 @@ def main(videoDir, debug, dis_yolo):
 
         finalImage = weighted_img(correctionImage, orig_frame)
 
-        if debug:
+        if args.debug:
             cv2.imshow("orig_frame", orig_frame)
             #cv2.imshow("edgesImage_11", edgesImage_11)
             #cv2.imshow("edgesImage_114", edgesImage_114)
             cv2.imshow("correctionImage", correctionImage)
-        if not dis_yolo:            
-            finalImage = yolo(orig_frame, finalImage)
+        if not args.dis_yolo and not args.pre_detect:            
+            finalImage = yolo(orig_frame, finalImage, args.weights)
         
         cv2.imshow("finalImage", finalImage)
         #cv2.imshow("orig_frame", orig_frame)
@@ -190,7 +198,11 @@ if __name__ == '__main__':
     parser.add_argument('--path', type=str, required=True, help='Path to the video file')
     parser.add_argument('--debug', action='store_true', help='Show all the layers of processing image')
     parser.add_argument('--dis-yolo', default=False, action='store_true', help='Disable yolo detection')
+    parser.add_argument('--pre-detect', default=False, action='store_true', help='Detect the objects before running the line detector')
+    parser.add_argument('--save-dir', type=str, default='./temp/', help='Path to save the video with objects detected')
+    parser.add_argument('--name', type=str, default='video_det', help='Name for the video detected saved')
+    parser.add_argument('--weights', type=str, default='./Yolo_ADSPTF/weights/kitti.pt', help='Weights for Yolo inference')
     
     args = parser.parse_args()
     
-    main(args.path, args.debug, args.dis_yolo)
+    main(args)

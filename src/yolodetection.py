@@ -18,7 +18,7 @@ def draw_bbxs(img, coords, name):
 
     return img
 
-def yolo(img, final):
+def yolo(img, final, weights):
     
     # Create temp image dir for yolo inference
     if not os.path.exists('./temp'):
@@ -30,7 +30,7 @@ def yolo(img, final):
 
     # Inference of the image with the yolov5 model with pre trained weights
     detections = detection(
-        weights='./Yolo_ADSPTF/weights/kitti.pt', source='./temp/image.jpg', 
+        weights=weights, source='./temp/image.jpg', 
         project='./temp/', name='detections', save_txt=False, save_conf=True, nosave=True
     )  
 
@@ -54,8 +54,16 @@ def yolo(img, final):
     return final
 
     
-
+def pre_detection(path, save_dir, name, weights):
     
+    print('\n>>>>>>>>> Start runnig yolo <<<<<<<<<<<< \n')
+    
+    detection(
+        weights=weights, source=path, 
+        project=save_dir, name=name, save_txt=False, save_conf=True
+    )  
+    
+    print('\n>>>>>>>>> Yolo video detction finished <<<<<<<<<<<< \n')
 
 
     
