@@ -12,8 +12,9 @@ O aplicação tem por objetivo auxiliar a dirigibilidade de um veículo, fornece
 # Yolo repositório
 Clone o repositório no diretório base deste:
 
-`cd ADSP-TF/` 
-`git clone https://github.com/rafixcs/Yolo_ADSPTF.git -b master`
+```cd ADSP-TF/
+git clone https://github.com/rafixcs/Yolo_ADSPTF.git -b master
+```
 
 # Instalação
 Criei o ambiente conda:
