@@ -22,8 +22,8 @@ Instale as dependencias do cuda e do pytorch:
 `conda install -c pytorch pytorch==1.7.0 torchvision cudatoolkit=10.1`
 
 E por fim instale as dependencias da Yolo:
-`cd Yolo_ADSPTF`
-`pip install  -r requirements.txt`
+```cd Yolo_ADSPTF
+pip install  -r requirements.txt```
 
 # Baixe os pessos da rede
 `https://brpucrs-my.sharepoint.com/:f:/g/personal/rafael_s_edu_pucrs_br/EsQXAaQDGpZDsptTaURmbk4BjVyT0V9-Oo637OyG6cviHw?e=kKKdLY`
