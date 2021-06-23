@@ -12,8 +12,8 @@ O aplicação tem por objetivo auxiliar a dirigibilidade de um veículo, fornece
 # Yolo repositório
 Clone o repositório no diretório base deste:
 
-```cd ADSP-TF/
-
+```
+cd ADSP-TF/
 git clone https://github.com/rafixcs/Yolo_ADSPTF.git -b master
 ```
 
@@ -28,8 +28,8 @@ Instale as dependencias do cuda e do pytorch:
 
 E por fim instale as dependencias da Yolo:
 
-```cd Yolo_ADSPTF
-
+```
+cd Yolo_ADSPTF
 pip install  -r requirements.txt
 ```
 
