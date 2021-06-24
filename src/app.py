@@ -132,9 +132,9 @@ def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
 
 def main(args):
     
-    video_path = args.save_dir + args.name + '/' + args.path.split(os.sep)[-1] if args.pre_detect and args.dis_yolo else args.path    
+    video_path = args.save_dir + args.name + '/' + args.path.split(os.sep)[-1] if args.pre_detect else args.path    
 
-    if args.pre_detect and args.dis_yolo:
+    if args.pre_detect:
         pre_detection(args.path, args.save_dir, args.name, args.weights)    
     
     video = cv2.VideoCapture(video_path)
@@ -201,7 +201,7 @@ if __name__ == '__main__':
     parser.add_argument('--pre-detect', default=False, action='store_true', help='Detect the objects before running the line detector')
     parser.add_argument('--save-dir', type=str, default='./temp/', help='Path to save the video with objects detected')
     parser.add_argument('--name', type=str, default='video_det', help='Name for the video detected saved')
-    parser.add_argument('--weights', type=str, default='./Yolo_ADSPTF/weights/kitti.pt', help='Weights for Yolo inference')
+    parser.add_argument('--weights', type=str, default='./Yolo_ADSPTF/weights/kitti_s.pt', help='Weights for Yolo inference')
     
     args = parser.parse_args()
     
