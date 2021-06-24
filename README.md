@@ -40,7 +40,7 @@ cd Yolo_ADSPTF
 pip install  -r requirements.txt
 ```
 
-# Baixe os pessos da rede
+# Baixe os pesos da rede
 
 `https://brpucrs-my.sharepoint.com/:f:/g/personal/rafael_s_edu_pucrs_br/EsQXAaQDGpZDsptTaURmbk4BjVyT0V9-Oo637OyG6cviHw?e=kKKdLY`
 
