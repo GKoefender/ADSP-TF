@@ -33,7 +33,7 @@ conda install cudatoolkit=10.1 cudnn=7.6.0
 conda install -c pytorch pytorch==1.7.0 torchvision cudatoolkit=10.1 
 ```
 
-E por fim instale as dependencias da Yolo:
+E por fim instale as dependências restantes da Yolo:
 
 ```
 cd Yolo_ADSPTF
