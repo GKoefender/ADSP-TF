@@ -20,7 +20,11 @@ git clone https://github.com/rafixcs/Yolo_ADSPTF.git -b master
 # Instalação
 Criei o ambiente conda:
 
-``` conda create -n yolo python=3.7 ```
+``` 
+conda install cudatoolkit=10.1 cudnn=7.6.0
+
+conda create -n yolo python=3.7 
+```
 
 Se possuir GPU NVidia Instale as dependencias do cuda e do pytorch:
 
