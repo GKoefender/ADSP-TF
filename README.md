@@ -45,7 +45,7 @@ Na pasta base execute o seguinte comando para executar a detecção de linhas ju
 
 Também é possével executar primeiro a detecção de objetos e posteriormente a detecção das linhas, tem performance melhor porém demora a inciar
 
-``` python -m src.app --path <path do arquivo de video .mp4> --dis-yolo --pre-detect ```
+``` python -m src.app --path <path do arquivo de video .mp4> --pre-detect ```
 
 
 
