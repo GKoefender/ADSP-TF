@@ -22,7 +22,7 @@ Criei o ambiente conda:
 
 ``` conda create -n yolo python=3.7 ```
 
-Instale as dependencias do cuda e do pytorch:
+Se possuir GPU NVidia Instale as dependencias do cuda e do pytorch:
 
 ``` conda install -c pytorch pytorch==1.7.0 torchvision cudatoolkit=10.1 ```
 
