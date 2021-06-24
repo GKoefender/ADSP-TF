@@ -22,6 +22,7 @@ Criei o ambiente conda:
 
 ``` 
 conda create -n yolo python=3.7 
+conda activate yolo
 ```
 
 Se possuir GPU NVidia Instale as dependencias do cuda e do pytorch:
