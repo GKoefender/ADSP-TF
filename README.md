@@ -10,7 +10,7 @@ O aplicação tem por objetivo auxiliar a dirigibilidade de um veículo, fornece
 * OpenCV 
 
 # Yolo repositório
-Clone o repositório no diretório base deste:
+Clone o repositório no diretório base:
 
 ```
 cd ADSP-TF/
