@@ -130,6 +130,16 @@ def weighted_img(img, initial_img, α=0.8, β=1., λ=0.):
     return cv2.addWeighted(initial_img, α, img, β, λ)
 
 
+def save_detected_video(frames, path):
+    height, width, layers = frames[0].shape
+    size = (width,height)
+
+    out = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+
+    for i in range(len(frames)):
+        out.write(frames[i])
+    out.release()
+
 def main(args):
     
     video_path = args.save_dir + args.name + '/' + args.path.split(os.sep)[-1] if args.pre_detect else args.path    
@@ -138,6 +148,7 @@ def main(args):
         pre_detection(args.path, args.save_dir, args.name, args.weights)    
     
     video = cv2.VideoCapture(video_path)
+    frames_to_save = []
 
     while True:
         ret, orig_frame = video.read()
@@ -176,6 +187,8 @@ def main(args):
 
         finalImage = weighted_img(correctionImage, orig_frame)
 
+        frames_to_save.append(finalImage)
+
         if args.debug:
             cv2.imshow("orig_frame", orig_frame)
             #cv2.imshow("edgesImage_11", edgesImage_11)
@@ -192,6 +205,11 @@ def main(args):
     video.release()
     cv2.destroyAllWindows()
 
+    if args.out_save:
+        print(f'Saving output video to: {args.output}')
+        save_detected_video(frames_to_save, args.output)
+        print('Video saved!')
+
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
@@ -202,6 +220,8 @@ if __name__ == '__main__':
     parser.add_argument('--save-dir', type=str, default='./temp/', help='Path to save the video with objects detected')
     parser.add_argument('--name', type=str, default='video_det', help='Name for the video detected saved')
     parser.add_argument('--weights', type=str, default='./Yolo_ADSPTF/weights/kitti_s.pt', help='Weights for Yolo inference')
+    parser.add_argument('--output', type=str, default='./temp/output.avi', help='Ouput path, name and format')
+    parser.add_argument('--out-save', default=True, action='store_false', help='Set to not save the output video')
     
     args = parser.parse_args()
     
